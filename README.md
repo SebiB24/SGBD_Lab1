@@ -29,7 +29,10 @@ A simple Windows Forms application built with .NET 8.0 for managing a SQL Server
 
 ## Screenshots
 
+![image](https://github.com/user-attachments/assets/b1b37c2c-cb05-42fb-b503-9938cb3bc49e)
+
 ![image](https://github.com/user-attachments/assets/f6092964-1d94-49e8-ba4c-0f3e9c51877d)
+
 ![image](https://github.com/user-attachments/assets/767e7626-27a7-4854-8c80-2f8fbbc20295)
 
 
