@@ -36,10 +36,13 @@ namespace SGBD_Lab1
                     ds.Relations.Add(relation);
                     bsParent.DataSource = ds.Tables["Lant"];
                     dataGridViewParent.DataSource = bsParent;
-                    textBox1.DataBindings.Add("Text", bsParent, "nume", true);
                     bsChild.DataSource = bsParent;
                     bsChild.DataMember = "FK_Lant_Locatii";
                     dataGridViewChild.DataSource = bsChild;
+                    textBoxAdr.DataBindings.Add("Text", bsChild, "adresa", true);
+                    textBoxSup.DataBindings.Add("Text", bsChild, "suprafata", true);
+                    textBoxData.DataBindings.Add("Text", bsChild, "data_deschidere", true);
+
                 }
             }
             catch (Exception ex)

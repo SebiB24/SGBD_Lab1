@@ -32,9 +32,9 @@ namespace SGBD_Lab1
         {
             dataGridViewParent = new DataGridView();
             dataGridViewChild = new DataGridView();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            textBox3 = new TextBox();
+            textBoxAdr = new TextBox();
+            textBoxData = new TextBox();
+            textBoxSup = new TextBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -65,26 +65,26 @@ namespace SGBD_Lab1
             dataGridViewChild.Size = new Size(634, 214);
             dataGridViewChild.TabIndex = 10;
             // 
-            // textBox1
+            // textBoxAdr
             // 
-            textBox1.Location = new Point(681, 336);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(225, 27);
-            textBox1.TabIndex = 1;
+            textBoxAdr.Location = new Point(681, 336);
+            textBoxAdr.Name = "textBoxAdr";
+            textBoxAdr.Size = new Size(225, 27);
+            textBoxAdr.TabIndex = 1;
             // 
-            // textBox2
+            // textBoxData
             // 
-            textBox2.Location = new Point(681, 472);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(153, 27);
-            textBox2.TabIndex = 2;
+            textBoxData.Location = new Point(681, 472);
+            textBoxData.Name = "textBoxData";
+            textBoxData.Size = new Size(153, 27);
+            textBoxData.TabIndex = 2;
             // 
-            // textBox3
+            // textBoxSup
             // 
-            textBox3.Location = new Point(681, 403);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(153, 27);
-            textBox3.TabIndex = 14;
+            textBoxSup.Location = new Point(681, 403);
+            textBoxSup.Name = "textBoxSup";
+            textBoxSup.Size = new Size(153, 27);
+            textBoxSup.TabIndex = 14;
             // 
             // label1
             // 
@@ -167,7 +167,7 @@ namespace SGBD_Lab1
             ClientSize = new Size(950, 548);
             Controls.Add(label5);
             Controls.Add(label4);
-            Controls.Add(textBox3);
+            Controls.Add(textBoxSup);
             Controls.Add(label3);
             Controls.Add(deleteButton);
             Controls.Add(updateButton);
@@ -175,8 +175,8 @@ namespace SGBD_Lab1
             Controls.Add(addButton);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(textBoxData);
+            Controls.Add(textBoxAdr);
             Controls.Add(dataGridViewParent);
             Name = "Form1";
             Text = "Form1";
@@ -191,15 +191,15 @@ namespace SGBD_Lab1
 
         private DataGridView dataGridViewParent;
         private DataGridView dataGridViewChild;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox textBoxAdr;
+        private TextBox textBoxData;
         private Label label1;
         private Label label2;
         private Button addButton;
         private Button updateButton;
         private Button deleteButton;
         private Label label3;
-        private TextBox textBox3;
+        private TextBox textBoxSup;
         private Label label4;
         private Label label5;
     }
