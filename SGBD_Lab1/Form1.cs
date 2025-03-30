@@ -62,9 +62,9 @@ namespace SGBD_Lab1
                     textBoxSup.DataBindings.Clear();
                     dateTimePicker1.DataBindings.Clear();
 
-                    textBoxAdr.DataBindings.Add("Text", bsChild, "adresa", true);
-                    textBoxSup.DataBindings.Add("Text", bsChild, "suprafata", true);
-                    dateTimePicker1.DataBindings.Add("Value", bsChild, "data_deschidere", true);
+                    textBoxAdr.DataBindings.Add("Text", bsChild, "adresa", true, DataSourceUpdateMode.Never); // !!DataSourceUpdateMode.Never so that the textBox doesnt affect the Data Set directly
+                    textBoxSup.DataBindings.Add("Text", bsChild, "suprafata", true, DataSourceUpdateMode.Never);
+                    dateTimePicker1.DataBindings.Add("Value", bsChild, "data_deschidere", true, DataSourceUpdateMode.Never);
                 }
             }
             catch (Exception ex)
