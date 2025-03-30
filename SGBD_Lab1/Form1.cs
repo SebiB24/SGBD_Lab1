@@ -72,13 +72,36 @@ namespace SGBD_Lab1
                 MessageBox.Show(ex.Message);
             }
         }
+        /// Validari =========================================================================================================================
+        
+        private bool validateInput()
+        {
+            if (dateTimePicker1.Value > DateTime.Now)
+            {
+                MessageBox.Show("Data deschiderii nu poate fi in viitor!");
+                return false;
+            }
+            if (!int.TryParse(textBoxSup.Text, out int suprafata) || suprafata < 0)
+            {
+                MessageBox.Show("Suprafata trebuie sa fie un NUMAR POZITIV!");
+                return false;
+            }
+            if (textBoxAdr.Text.Length < 4)
+            {
+                MessageBox.Show("Va rog introduceti o adresa completa!");
+                return false;
+            }
+            return true;
+        }
 
         /// Add Button =======================================================================================================================
         private void addButton_Click(object sender, EventArgs e)
         {
             try
             {
+                   
                 if (bsParent.Current == null) return;
+                if(!validateInput()) return;
                 int idLant = (int)((DataRowView)bsParent.Current)["id_lant"];
 
                 using (con = new SqlConnection(connectionString))
@@ -94,7 +117,7 @@ namespace SGBD_Lab1
                     cmd.ExecuteNonQuery();
                 }
                 LoadData();
-                MessageBox.Show("Record added successfully!");
+                MessageBox.Show("Adaugare reusita!");
             }
             catch (Exception ex)
             {
@@ -108,6 +131,7 @@ namespace SGBD_Lab1
             try
             {
                 if (bsChild.Current == null) return;
+                if (!validateInput()) return;
                 int idLocatie = (int)((DataRowView)bsChild.Current)["id_locatie"];
 
                 using (con = new SqlConnection(connectionString))
@@ -122,7 +146,7 @@ namespace SGBD_Lab1
                     cmd.ExecuteNonQuery();
                 }
                 LoadData();
-                MessageBox.Show("Record updated successfully!");
+                MessageBox.Show("Actualizare reusita!");
             }
             catch (Exception ex)
             {
@@ -137,7 +161,7 @@ namespace SGBD_Lab1
             {
                 if (dataGridViewChild.SelectedRows.Count == 0)
                 {
-                    MessageBox.Show("Please select a record to delete.");
+                    MessageBox.Show("Selectati un element pentru stergere.");
                     return;
                 }
                 int idChild = Convert.ToInt32(dataGridViewChild.SelectedRows[0].Cells["id_locatie"].Value);
@@ -150,7 +174,7 @@ namespace SGBD_Lab1
                     cmd.ExecuteNonQuery();
                 }
                 LoadData();
-                MessageBox.Show("Record deleted successfully!");
+                MessageBox.Show("Stergere reusita!");
             }
             catch (Exception ex)
             {

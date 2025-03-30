@@ -53,7 +53,7 @@ namespace SGBD_Lab1
             dataGridViewParent.Location = new Point(27, 40);
             dataGridViewParent.Name = "dataGridViewParent";
             dataGridViewParent.RowHeadersWidth = 51;
-            dataGridViewParent.Size = new Size(453, 214);
+            dataGridViewParent.Size = new Size(433, 214);
             dataGridViewParent.TabIndex = 0;
             // 
             // dataGridViewChild
@@ -67,14 +67,14 @@ namespace SGBD_Lab1
             // 
             // textBoxAdr
             // 
-            textBoxAdr.Location = new Point(700, 336);
+            textBoxAdr.Location = new Point(691, 336);
             textBoxAdr.Name = "textBoxAdr";
             textBoxAdr.Size = new Size(187, 27);
             textBoxAdr.TabIndex = 1;
             // 
             // textBoxSup
             // 
-            textBoxSup.Location = new Point(700, 403);
+            textBoxSup.Location = new Point(691, 403);
             textBoxSup.Name = "textBoxSup";
             textBoxSup.Size = new Size(187, 27);
             textBoxSup.TabIndex = 14;
@@ -82,7 +82,7 @@ namespace SGBD_Lab1
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(700, 313);
+            label1.Location = new Point(691, 313);
             label1.Name = "label1";
             label1.Size = new Size(55, 20);
             label1.TabIndex = 5;
@@ -91,7 +91,7 @@ namespace SGBD_Lab1
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(700, 449);
+            label2.Location = new Point(691, 449);
             label2.Name = "label2";
             label2.Size = new Size(117, 20);
             label2.TabIndex = 6;
@@ -100,7 +100,7 @@ namespace SGBD_Lab1
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(700, 380);
+            label3.Location = new Point(691, 380);
             label3.Name = "label3";
             label3.Size = new Size(77, 20);
             label3.TabIndex = 13;
@@ -108,9 +108,9 @@ namespace SGBD_Lab1
             // 
             // addButton
             // 
-            addButton.Location = new Point(539, 57);
+            addButton.Location = new Point(497, 64);
             addButton.Name = "addButton";
-            addButton.Size = new Size(367, 45);
+            addButton.Size = new Size(381, 45);
             addButton.TabIndex = 9;
             addButton.Text = "Add";
             addButton.UseVisualStyleBackColor = true;
@@ -118,9 +118,9 @@ namespace SGBD_Lab1
             // 
             // updateButton
             // 
-            updateButton.Location = new Point(539, 119);
+            updateButton.Location = new Point(497, 126);
             updateButton.Name = "updateButton";
-            updateButton.Size = new Size(367, 45);
+            updateButton.Size = new Size(381, 45);
             updateButton.TabIndex = 11;
             updateButton.Text = "Update";
             updateButton.UseVisualStyleBackColor = true;
@@ -128,9 +128,9 @@ namespace SGBD_Lab1
             // 
             // deleteButton
             // 
-            deleteButton.Location = new Point(539, 180);
+            deleteButton.Location = new Point(497, 187);
             deleteButton.Name = "deleteButton";
-            deleteButton.Size = new Size(367, 45);
+            deleteButton.Size = new Size(381, 45);
             deleteButton.TabIndex = 12;
             deleteButton.Text = "Delete";
             deleteButton.UseVisualStyleBackColor = true;
@@ -158,17 +158,17 @@ namespace SGBD_Lab1
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(700, 472);
+            dateTimePicker1.Format = DateTimePickerFormat.Short;
+            dateTimePicker1.Location = new Point(691, 472);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(187, 27);
             dateTimePicker1.TabIndex = 17;
-            dateTimePicker1.Format = DateTimePickerFormat.Short;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(950, 548);
+            ClientSize = new Size(906, 548);
             Controls.Add(dateTimePicker1);
             Controls.Add(label5);
             Controls.Add(label4);
