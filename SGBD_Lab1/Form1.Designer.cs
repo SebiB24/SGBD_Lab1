@@ -33,7 +33,6 @@ namespace SGBD_Lab1
             dataGridViewParent = new DataGridView();
             dataGridViewChild = new DataGridView();
             textBoxAdr = new TextBox();
-            textBoxData = new TextBox();
             textBoxSup = new TextBox();
             label1 = new Label();
             label2 = new Label();
@@ -43,6 +42,7 @@ namespace SGBD_Lab1
             deleteButton = new Button();
             label4 = new Label();
             label5 = new Label();
+            dateTimePicker1 = new DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)dataGridViewParent).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewChild).BeginInit();
             SuspendLayout();
@@ -67,29 +67,22 @@ namespace SGBD_Lab1
             // 
             // textBoxAdr
             // 
-            textBoxAdr.Location = new Point(681, 336);
+            textBoxAdr.Location = new Point(700, 336);
             textBoxAdr.Name = "textBoxAdr";
-            textBoxAdr.Size = new Size(225, 27);
+            textBoxAdr.Size = new Size(187, 27);
             textBoxAdr.TabIndex = 1;
-            // 
-            // textBoxData
-            // 
-            textBoxData.Location = new Point(681, 472);
-            textBoxData.Name = "textBoxData";
-            textBoxData.Size = new Size(153, 27);
-            textBoxData.TabIndex = 2;
             // 
             // textBoxSup
             // 
-            textBoxSup.Location = new Point(681, 403);
+            textBoxSup.Location = new Point(700, 403);
             textBoxSup.Name = "textBoxSup";
-            textBoxSup.Size = new Size(153, 27);
+            textBoxSup.Size = new Size(187, 27);
             textBoxSup.TabIndex = 14;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(681, 313);
+            label1.Location = new Point(700, 313);
             label1.Name = "label1";
             label1.Size = new Size(55, 20);
             label1.TabIndex = 5;
@@ -98,7 +91,7 @@ namespace SGBD_Lab1
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(681, 449);
+            label2.Location = new Point(700, 449);
             label2.Name = "label2";
             label2.Size = new Size(117, 20);
             label2.TabIndex = 6;
@@ -107,7 +100,7 @@ namespace SGBD_Lab1
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(681, 380);
+            label3.Location = new Point(700, 380);
             label3.Name = "label3";
             label3.Size = new Size(77, 20);
             label3.TabIndex = 13;
@@ -121,6 +114,7 @@ namespace SGBD_Lab1
             addButton.TabIndex = 9;
             addButton.Text = "Add";
             addButton.UseVisualStyleBackColor = true;
+            addButton.Click += addButton_Click;
             // 
             // updateButton
             // 
@@ -130,6 +124,7 @@ namespace SGBD_Lab1
             updateButton.TabIndex = 11;
             updateButton.Text = "Update";
             updateButton.UseVisualStyleBackColor = true;
+            updateButton.Click += updateButton_Click;
             // 
             // deleteButton
             // 
@@ -139,6 +134,7 @@ namespace SGBD_Lab1
             deleteButton.TabIndex = 12;
             deleteButton.Text = "Delete";
             deleteButton.UseVisualStyleBackColor = true;
+            deleteButton.Click += deleteButton_Click;
             // 
             // label4
             // 
@@ -160,11 +156,20 @@ namespace SGBD_Lab1
             label5.TabIndex = 16;
             label5.Text = "LANTURI DE SALI DE FITNESS";
             // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.Location = new Point(700, 472);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(187, 27);
+            dateTimePicker1.TabIndex = 17;
+            dateTimePicker1.Format = DateTimePickerFormat.Short;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(950, 548);
+            Controls.Add(dateTimePicker1);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(textBoxSup);
@@ -175,7 +180,6 @@ namespace SGBD_Lab1
             Controls.Add(addButton);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(textBoxData);
             Controls.Add(textBoxAdr);
             Controls.Add(dataGridViewParent);
             Name = "Form1";
@@ -192,7 +196,6 @@ namespace SGBD_Lab1
         private DataGridView dataGridViewParent;
         private DataGridView dataGridViewChild;
         private TextBox textBoxAdr;
-        private TextBox textBoxData;
         private Label label1;
         private Label label2;
         private Button addButton;
@@ -202,5 +205,6 @@ namespace SGBD_Lab1
         private TextBox textBoxSup;
         private Label label4;
         private Label label5;
+        private DateTimePicker dateTimePicker1;
     }
 }
