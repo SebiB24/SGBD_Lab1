@@ -1,5 +1,6 @@
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using System;
+using System.Configuration;
 using System.Data;
 using System.Windows.Forms;
 
@@ -7,14 +8,21 @@ namespace SGBD_Lab1
 {
     public partial class Form1 : Form
     {
-        String connectionString = @"Server=LEGIONAR\SQLEXPRESS;Database=Lab1_SGBD;Integrated Security=True;TrustServerCertificate=true;";
+        static string server = ConfigurationManager.AppSettings.Get("server");
+        static string dataBase = ConfigurationManager.AppSettings.Get("database");
+        static string parentTable = ConfigurationManager.AppSettings.Get("parentTable");
+        static string childTable = ConfigurationManager.AppSettings.Get("childTable");
+        static string parentPrimaryKey = ConfigurationManager.AppSettings.Get("parentPrimaryKey");
+        static string childForeignKey = ConfigurationManager.AppSettings.Get("childForeignKey");
+        static string childPrimaryKey = ConfigurationManager.AppSettings.Get("childPrimaryKey");
+
         DataSet ds = new DataSet();
-        SqlDataAdapter parentAdapter = new SqlDataAdapter();
-        SqlDataAdapter childAdapter = new SqlDataAdapter();
+        SqlDataAdapter parentAdapter;
+        SqlDataAdapter childAdapter;
         BindingSource bsParent = new BindingSource();
         BindingSource bsChild = new BindingSource();
 
-        SqlConnection con;
+        SqlConnection sqlConnection = new SqlConnection(@"Server=" + server + ";Database=" + dataBase + ";Integrated Security=True;TrustServerCertificate=true;");
 
         public Form1()
         {
@@ -26,159 +34,117 @@ namespace SGBD_Lab1
             LoadData();
         }
 
-        /// Load Data =======================================================================================================================
         private void LoadData()
         {
             try
             {
-                using (con = new SqlConnection(connectionString))
-                {
-                    con.Open();
-                    parentAdapter.SelectCommand = new SqlCommand("SELECT * FROM Lant;", con);
-                    childAdapter.SelectCommand = new SqlCommand("SELECT * FROM Locatie;", con);
+                if (sqlConnection.State != ConnectionState.Open)
+                    sqlConnection.Open();
 
-                    ds.Clear();
-                    parentAdapter.Fill(ds, "Lant");
-                    childAdapter.Fill(ds, "Locatie");
+                parentAdapter = new SqlDataAdapter("SELECT * FROM " + parentTable, sqlConnection);
+                parentAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
 
-                    if (ds.Relations.Contains("FK_Lant_Locatii"))
-                    {
-                        ds.Relations.Remove("FK_Lant_Locatii");
-                    }
+                childAdapter = new SqlDataAdapter("SELECT * FROM " + childTable, sqlConnection);
+                childAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
 
-                    DataColumn pkColumn = ds.Tables["Lant"].Columns["id_lant"];
-                    DataColumn fkColumn = ds.Tables["Locatie"].Columns["id_lant"];
-                    DataRelation relation = new DataRelation("FK_Lant_Locatii", pkColumn, fkColumn, true);
-                    ds.Relations.Add(relation);
+                ds.Clear();
+                parentAdapter.Fill(ds, parentTable);
+                childAdapter.Fill(ds, childTable);
 
-                    bsParent.DataSource = ds.Tables["Lant"];
-                    dataGridViewParent.DataSource = bsParent;
+                // Configurare AutoIncrement pentru ID generat în SQL
+                DataTable parentDt = ds.Tables[parentTable];
+                parentDt.Columns[parentPrimaryKey].AutoIncrement = true;
+                parentDt.Columns[parentPrimaryKey].AutoIncrementSeed = -1;
+                parentDt.Columns[parentPrimaryKey].AutoIncrementStep = -1;
 
-                    bsChild.DataSource = bsParent;
-                    bsChild.DataMember = "FK_Lant_Locatii";
-                    dataGridViewChild.DataSource = bsChild;
+                // Construire comenzi
+                SqlCommandBuilder parentBuilder = new SqlCommandBuilder(parentAdapter);
+                SqlCommandBuilder childBuilder = new SqlCommandBuilder(childAdapter);
 
-                    textBoxAdr.DataBindings.Clear();
-                    textBoxSup.DataBindings.Clear();
-                    dateTimePicker1.DataBindings.Clear();
+                // Setare explicită comenzi (opțional dar recomandat)
+                parentAdapter.InsertCommand = parentBuilder.GetInsertCommand(true);
+                parentAdapter.UpdateCommand = parentBuilder.GetUpdateCommand(true);
+                parentAdapter.DeleteCommand = parentBuilder.GetDeleteCommand(true);
 
-                    textBoxAdr.DataBindings.Add("Text", bsChild, "adresa", true, DataSourceUpdateMode.Never); // !!DataSourceUpdateMode.Never so that the textBox doesnt affect the Data Set directly
-                    textBoxSup.DataBindings.Add("Text", bsChild, "suprafata", true, DataSourceUpdateMode.Never);
-                    dateTimePicker1.DataBindings.Add("Value", bsChild, "data_deschidere", true, DataSourceUpdateMode.Never);
-                }
+                childAdapter.InsertCommand = childBuilder.GetInsertCommand(true);
+                childAdapter.UpdateCommand = childBuilder.GetUpdateCommand(true);
+                childAdapter.DeleteCommand = childBuilder.GetDeleteCommand(true);
+
+                // Relație parent-child
+                if (ds.Relations.Contains("fk_parent_child"))
+                    ds.Relations.Remove("fk_parent_child");
+
+                DataColumn parentPK = ds.Tables[parentTable].Columns[parentPrimaryKey];
+                DataColumn childFK = ds.Tables[childTable].Columns[childForeignKey];
+                DataRelation relation = new DataRelation("fk_parent_child", parentPK, childFK, true);
+                ds.Relations.Add(relation);
+
+                // BindingSource
+                bsParent.DataSource = ds;
+                bsParent.DataMember = parentTable;
+
+                bsChild.DataSource = bsParent;
+                bsChild.DataMember = "fk_parent_child";
+
+                dataGridViewParent.DataSource = bsParent;
+                dataGridViewChild.DataSource = bsChild;
+
+                dataGridViewChild.DataError += dataGridViewChild_DataError;
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Eroare la încărcare: " + ex.Message);
             }
         }
-        /// Validari =========================================================================================================================
-        
-        private bool validateInput()
+
+        private void dataGridViewChild_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            if (dateTimePicker1.Value > DateTime.Now)
-            {
-                MessageBox.Show("Data deschiderii nu poate fi in viitor!");
-                return false;
-            }
-            if (!int.TryParse(textBoxSup.Text, out int suprafata) || suprafata < 0)
-            {
-                MessageBox.Show("Suprafata trebuie sa fie un NUMAR POZITIV!");
-                return false;
-            }
-            if (textBoxAdr.Text.Length < 4)
-            {
-                MessageBox.Show("Va rog introduceti o adresa completa!");
-                return false;
-            }
-            return true;
+            MessageBox.Show("Eroare de conversie: " + e.Exception.Message);
+            e.ThrowException = false;
         }
 
-        /// Add Button =======================================================================================================================
-        private void addButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                   
-                if (bsParent.Current == null) return;
-                if(!validateInput()) return;
-                int idLant = (int)((DataRowView)bsParent.Current)["id_lant"];
 
-                using (con = new SqlConnection(connectionString))
-                {
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand(
-                        "INSERT INTO Locatie (adresa, suprafata, data_deschidere, id_lant) VALUES (@adresa, @suprafata, @data_deschidere, @id_lant);", con);
-                    cmd.Parameters.AddWithValue("@adresa", textBoxAdr.Text);
-                    cmd.Parameters.AddWithValue("@suprafata", int.Parse(textBoxSup.Text));
-                    cmd.Parameters.AddWithValue("@data_deschidere", dateTimePicker1.Value);
-                    cmd.Parameters.AddWithValue("@id_lant", idLant);
-
-                    cmd.ExecuteNonQuery();
-                }
-                LoadData();
-                MessageBox.Show("Adaugare reusita!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
-        }
-
-        /// Update Button =======================================================================================================================
         private void updateButton_Click(object sender, EventArgs e)
         {
             try
             {
-                if (bsChild.Current == null) return;
-                if (!validateInput()) return;
-                int idLocatie = (int)((DataRowView)bsChild.Current)["id_locatie"];
-
-                using (con = new SqlConnection(connectionString))
-                {
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand(
-                        "UPDATE Locatie SET adresa=@adresa, suprafata=@suprafata, data_deschidere=@data_deschidere WHERE id_locatie=@id_locatie", con);
-                    cmd.Parameters.AddWithValue("@adresa", textBoxAdr.Text);
-                    cmd.Parameters.AddWithValue("@suprafata", int.Parse(textBoxSup.Text));
-                    cmd.Parameters.AddWithValue("@data_deschidere", dateTimePicker1.Value);
-                    cmd.Parameters.AddWithValue("@id_locatie", idLocatie);
-                    cmd.ExecuteNonQuery();
-                }
-                LoadData();
-                MessageBox.Show("Actualizare reusita!");
+                parentAdapter.Update(ds, parentTable);
+                childAdapter.Update(ds, childTable);
+                MessageBox.Show("Date actualizate cu succes!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Eroare la actualizare: " + ex.Message);
             }
         }
 
-        /// Delete Button =======================================================================================================================
         private void deleteButton_Click(object sender, EventArgs e)
         {
             try
             {
                 if (dataGridViewChild.SelectedRows.Count == 0)
                 {
-                    MessageBox.Show("Selectati un element pentru stergere.");
+                    MessageBox.Show("Selectați un element pentru ștergere.");
                     return;
                 }
-                int idChild = Convert.ToInt32(dataGridViewChild.SelectedRows[0].Cells["id_locatie"].Value);
 
-                using (SqlConnection con = new SqlConnection(connectionString))
+                int idChild = Convert.ToInt32(dataGridViewChild.SelectedRows[0].Cells[childPrimaryKey].Value);
+
+                using (SqlCommand cmd = new SqlCommand(
+                    "DELETE FROM " + childTable + " WHERE " + childPrimaryKey + "=@childPrimaryKey",
+                    sqlConnection))
                 {
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand("DELETE FROM Locatie WHERE id_locatie=@id_locatie", con);
-                    cmd.Parameters.AddWithValue("@id_locatie", idChild);
+                    cmd.Parameters.AddWithValue("@childPrimaryKey", idChild);
                     cmd.ExecuteNonQuery();
                 }
+
                 LoadData();
-                MessageBox.Show("Stergere reusita!");
+                MessageBox.Show("Ștergere reușită!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Eroare: " + ex.Message);
             }
         }
     }
