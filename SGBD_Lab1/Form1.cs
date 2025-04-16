@@ -16,13 +16,15 @@ namespace SGBD_Lab1
         static string childForeignKey = ConfigurationManager.AppSettings.Get("childForeignKey");
         static string childPrimaryKey = ConfigurationManager.AppSettings.Get("childPrimaryKey");
 
+        static string conString = @"Server=" + server + ";Database=" + dataBase + ";Integrated Security=True;TrustServerCertificate=true;";
+
         DataSet ds = new DataSet();
         SqlDataAdapter parentAdapter;
         SqlDataAdapter childAdapter;
         BindingSource bsParent = new BindingSource();
         BindingSource bsChild = new BindingSource();
 
-        SqlConnection sqlConnection = new SqlConnection(@"Server=" + server + ";Database=" + dataBase + ";Integrated Security=True;TrustServerCertificate=true;");
+        SqlConnection sqlConnection = new SqlConnection(conString);
 
         public Form1()
         {
@@ -34,6 +36,7 @@ namespace SGBD_Lab1
             LoadData();
         }
 
+        // Load Data  ===============================================================================
         private void LoadData()
         {
             try
@@ -51,17 +54,17 @@ namespace SGBD_Lab1
                 parentAdapter.Fill(ds, parentTable);
                 childAdapter.Fill(ds, childTable);
 
-                // Configurare AutoIncrement pentru ID generat în SQL
+                // Configure AutoIncrement for ID generated in SQL
                 DataTable parentDt = ds.Tables[parentTable];
                 parentDt.Columns[parentPrimaryKey].AutoIncrement = true;
                 parentDt.Columns[parentPrimaryKey].AutoIncrementSeed = -1;
                 parentDt.Columns[parentPrimaryKey].AutoIncrementStep = -1;
 
-                // Construire comenzi
+                // Build commands
                 SqlCommandBuilder parentBuilder = new SqlCommandBuilder(parentAdapter);
                 SqlCommandBuilder childBuilder = new SqlCommandBuilder(childAdapter);
 
-                // Setare explicită comenzi (opțional dar recomandat)
+                // Explicitly set commands
                 parentAdapter.InsertCommand = parentBuilder.GetInsertCommand(true);
                 parentAdapter.UpdateCommand = parentBuilder.GetUpdateCommand(true);
                 parentAdapter.DeleteCommand = parentBuilder.GetDeleteCommand(true);
@@ -70,7 +73,7 @@ namespace SGBD_Lab1
                 childAdapter.UpdateCommand = childBuilder.GetUpdateCommand(true);
                 childAdapter.DeleteCommand = childBuilder.GetDeleteCommand(true);
 
-                // Relație parent-child
+                // Parent-child relationship
                 if (ds.Relations.Contains("fk_parent_child"))
                     ds.Relations.Remove("fk_parent_child");
 
@@ -94,28 +97,28 @@ namespace SGBD_Lab1
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Eroare la încărcare: " + ex.Message);
+                MessageBox.Show("Error loading data: " + ex.Message);
             }
         }
 
         private void dataGridViewChild_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            MessageBox.Show("Eroare de conversie: " + e.Exception.Message);
+            MessageBox.Show("Conversion error: " + e.Exception.Message);
             e.ThrowException = false;
         }
 
-
+        // Update/Delete Buttons =========================================================================
         private void updateButton_Click(object sender, EventArgs e)
         {
             try
             {
                 parentAdapter.Update(ds, parentTable);
                 childAdapter.Update(ds, childTable);
-                MessageBox.Show("Date actualizate cu succes!");
+                MessageBox.Show("Data updated successfully!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Eroare la actualizare: " + ex.Message);
+                MessageBox.Show("Update error: " + ex.Message);
             }
         }
 
@@ -125,7 +128,7 @@ namespace SGBD_Lab1
             {
                 if (dataGridViewChild.SelectedRows.Count == 0)
                 {
-                    MessageBox.Show("Selectați un element pentru ștergere.");
+                    MessageBox.Show("Please select an item to delete.");
                     return;
                 }
 
@@ -140,11 +143,11 @@ namespace SGBD_Lab1
                 }
 
                 LoadData();
-                MessageBox.Show("Ștergere reușită!");
+                MessageBox.Show("Delete successful!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Eroare: " + ex.Message);
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
     }

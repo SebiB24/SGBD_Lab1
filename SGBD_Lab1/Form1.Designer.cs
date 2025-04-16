@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Configuration;
+using System.Data;
 using Microsoft.Data.SqlClient;
 
 namespace SGBD_Lab1
@@ -55,14 +56,14 @@ namespace SGBD_Lab1
             dataGridViewChild.Location = new Point(27, 304);
             dataGridViewChild.Name = "dataGridViewChild";
             dataGridViewChild.RowHeadersWidth = 51;
-            dataGridViewChild.Size = new Size(634, 214);
+            dataGridViewChild.Size = new Size(767, 214);
             dataGridViewChild.TabIndex = 10;
             // 
             // deleteButton
             // 
             deleteButton.Location = new Point(497, 162);
             deleteButton.Name = "deleteButton";
-            deleteButton.Size = new Size(164, 92);
+            deleteButton.Size = new Size(297, 92);
             deleteButton.TabIndex = 12;
             deleteButton.Text = "Delete";
             deleteButton.UseVisualStyleBackColor = true;
@@ -74,9 +75,9 @@ namespace SGBD_Lab1
             label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             label4.Location = new Point(27, 273);
             label4.Name = "label4";
-            label4.Size = new Size(86, 28);
+            label4.Size = new Size(0, 28);
             label4.TabIndex = 15;
-            label4.Text = childTable.ToUpper();
+            label4.Text = ConfigurationManager.AppSettings.Get("childTable").ToUpper();
             // 
             // label5
             // 
@@ -84,15 +85,15 @@ namespace SGBD_Lab1
             label5.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             label5.Location = new Point(27, 9);
             label5.Name = "label5";
-            label5.Size = new Size(291, 28);
+            label5.Size = new Size(0, 28);
             label5.TabIndex = 16;
-            label5.Text = parentTable.ToUpper();
+            label5.Text = ConfigurationManager.AppSettings.Get("parentTable").ToUpper();
             // 
             // updateButton
             // 
             updateButton.Location = new Point(497, 40);
             updateButton.Name = "updateButton";
-            updateButton.Size = new Size(164, 94);
+            updateButton.Size = new Size(297, 94);
             updateButton.TabIndex = 17;
             updateButton.Text = "Update";
             updateButton.UseVisualStyleBackColor = true;
@@ -102,7 +103,7 @@ namespace SGBD_Lab1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(706, 548);
+            ClientSize = new Size(825, 548);
             Controls.Add(updateButton);
             Controls.Add(label5);
             Controls.Add(label4);
@@ -110,7 +111,7 @@ namespace SGBD_Lab1
             Controls.Add(dataGridViewChild);
             Controls.Add(dataGridViewParent);
             Name = "Form1";
-            Text = "Form1";
+            Text = ConfigurationManager.AppSettings.Get("formName");
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewParent).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewChild).EndInit();
